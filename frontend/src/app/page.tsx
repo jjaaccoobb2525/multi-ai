@@ -2,7 +2,7 @@ import { Textarea } from "@/modules/components/textarea";
 
 export default function MainPage() {
   return (
-    <main className="flex h-full w-full flex-col justify-center p-8">
+    <main className="absolute flex h-full w-full flex-col justify-center p-8">
       <div className="bg-red-200 flex h-full justify-between">
         <div>1</div>
         <div>2</div>
