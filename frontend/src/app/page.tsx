@@ -14,10 +14,12 @@ export default function MainPage() {
           <ResizablePanelComponent>
             {/* 사용자의 Input 영역 */}
             <UserInputArea />
+            {/* 사용자의 Input 영역 */}
           </ResizablePanelComponent>
           {/* AI 모델 영역 */}
           <ResizableHandle />
           <ModelsArea />
+          {/* AI 모델 영역 */}
         </ResizablePanelGroup>
       </div>
       <div className="flex w-full justify-center"></div>
