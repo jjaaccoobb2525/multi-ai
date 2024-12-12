@@ -5,6 +5,7 @@ import { gpt } from "@/server/gpt";
 import { userInputStateAtom } from "@/utilities/recoil/atoms/no-storage";
 
 import Image from "next/image";
+import { Rnd } from "react-rnd";
 import { useRecoilState } from "recoil";
 
 const models = [
@@ -33,7 +34,7 @@ const models = [
 
 const AiProfile = ({ name, madeBy, icon }: { name: string; madeBy: string; icon: string }) => {
   return (
-    <div className="flex items-center gap-2 rounded-lg bg-white p-2">
+    <div className="flex w-full items-center gap-2 rounded-lg bg-white p-2">
       <Image
         alt=""
         width={32}
@@ -52,10 +53,14 @@ export default function ModelsArea() {
     <div className="flex w-full gap-8">
       {models.map(({ id, name, madeBy, icon, func }, index) => {
         return (
-          <>
-            <div
+          <div
+            key={id}
+            className="h-full"
+          >
+            <Rnd
+              disableDragging
               className={cn(
-                "flex w-full flex-col items-center justify-start rounded-lg bg-zinc-200 p-4",
+                "!static min-h-full min-w-full rounded-lg bg-zinc-200 p-4",
                 userInput && "items-start"
               )}
             >
@@ -76,8 +81,8 @@ export default function ModelsArea() {
                   icon={icon}
                 />
               )}
-            </div>
-          </>
+            </Rnd>
+          </div>
         );
       })}
     </div>
