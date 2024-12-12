@@ -5,7 +5,7 @@ import UserInputArea from "@/modules/user-input";
 
 export default function MainPage() {
   return (
-    <main className="absolute flex h-full w-full flex-col justify-center gap-8 p-8">
+    <main className="absolute flex h-full w-[200vw] flex-col justify-center gap-8 p-8">
       <div className="flex h-full justify-between">
         <ResizablePanelGroup
           direction="horizontal"

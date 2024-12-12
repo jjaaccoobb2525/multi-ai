@@ -10,7 +10,7 @@ export default function RootLayout({ children }: { readonly children: ReactNode 
   return (
     <RecoilProvider>
       <html lang="ko">
-        <body className="h-screen w-screen">
+        <body className="h-screen w-[200vw]">
           <NextThemesProvider>{children}</NextThemesProvider>
         </body>
       </html>
