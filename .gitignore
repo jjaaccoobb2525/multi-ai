@@ -1,0 +1,21 @@
+# cosmos
+frontend/.cosmos/noa
+
+# test
+frontend/src/app/test
+
+# node modules
+frontend/node_modules
+
+# next
+frontend/.next
+frontend/next-env.d.ts
+
+# os
+.DS_Store
+
+# env
+.env*
+
+# vercel
+frontend/.vercel
