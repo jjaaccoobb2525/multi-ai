@@ -56,7 +56,7 @@ export default function ModelsArea() {
           <>
             <ResizablePanel
               className={cn(
-                "flex min-w-[200px] flex-col items-center justify-start gap-4 bg-blue-200 pt-4",
+                "flex flex-col items-center justify-start gap-4 bg-blue-200 pt-4",
                 userInput && "items-start"
               )}
             >
