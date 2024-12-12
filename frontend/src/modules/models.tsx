@@ -5,6 +5,7 @@ import { gpt } from "@/server/gpt";
 import { userInputStateAtom } from "@/utilities/recoil/atoms/no-storage";
 
 import Image from "next/image";
+import { Draggable } from "react-drag-reorder";
 import { Rnd } from "react-rnd";
 import { useRecoilState } from "recoil";
 
@@ -55,10 +56,16 @@ export default function ModelsArea() {
         return (
           <div
             key={id}
-            className="h-full"
+            className="h-full min-w-[300px]"
           >
             <Rnd
               disableDragging
+              enableResizing={{
+                right: true,
+                left: false,
+                top: false,
+                bottom: false
+              }}
               className={cn(
                 "!static min-h-full min-w-full rounded-lg bg-zinc-200 p-4",
                 userInput && "items-start"
