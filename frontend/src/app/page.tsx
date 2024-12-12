@@ -1,28 +1,21 @@
-"use client";
-
 import { ResizableHandle, ResizablePanelGroup } from "@/modules/components/resizable";
 import ModelsArea from "@/modules/models";
 import { ResizablePanelComponent } from "@/modules/resizable-panel";
 import UserInputArea from "@/modules/user-input";
 
-import { useState } from "react";
-
 export default function MainPage() {
-  const [userInput, setUserInput] = useState("");
-  const [pressEnter, setPressEnter] = useState(false);
-
   return (
     <main className="absolute flex h-full w-full flex-col justify-center gap-8 p-8">
       <div className="flex h-full justify-between">
-        <ResizablePanelGroup direction="horizontal">
+        <ResizablePanelGroup
+          direction="horizontal"
+          className="gap-4"
+        >
           <ResizablePanelComponent>
-            <UserInputArea
-              userInput={userInput}
-              setUserInput={setUserInput}
-              pressEnter={pressEnter}
-              setPressEnter={setPressEnter}
-            />
+            {/* 사용자의 Input 영역 */}
+            <UserInputArea />
           </ResizablePanelComponent>
+          {/* AI 모델 영역 */}
           <ResizableHandle />
           <ModelsArea />
         </ResizablePanelGroup>

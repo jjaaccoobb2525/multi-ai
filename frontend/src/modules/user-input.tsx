@@ -1,18 +1,13 @@
+"use client";
+
 import { Textarea } from "@/modules/components/textarea";
 
-import type { Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 
-export default function UserInputArea({
-  userInput,
-  setUserInput,
-  pressEnter,
-  setPressEnter
-}: {
-  userInput: string;
-  setUserInput: Dispatch<SetStateAction<string>>;
-  pressEnter: boolean;
-  setPressEnter: Dispatch<SetStateAction<boolean>>;
-}) {
+export default function UserInputArea() {
+  const [userInput, setUserInput] = useState("");
+  const [pressEnter, setPressEnter] = useState(false);
+
   return (
     <>
       <p className="text-right">{userInput}</p>
