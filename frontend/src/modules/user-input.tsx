@@ -12,12 +12,11 @@ export default function UserInputArea() {
   const [pressEnter, setPressEnter] = useState(false);
 
   return (
-    <>
+    <div className="flex w-[400px] flex-col justify-between rounded-lg bg-zinc-200 p-4">
       <div>
         {userInput && (
           <div
-            className="flex items-center justify-start gap-4 rounded-lg bg-zinc-200 p-2
-text-right"
+            className="flex items-center justify-start gap-4 rounded-lg bg-white p-2 text-right"
           >
             <div className="rounded-full border-2 border-black">
               <Image
@@ -49,6 +48,6 @@ text-right"
         className="w-full resize-none transition-shadow duration-300 focus-within:shadow-lg
 hover:shadow-lg"
       />
-    </>
+    </div>
   );
 }

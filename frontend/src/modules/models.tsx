@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/libs/shadcn/utils";
-import { ResizableHandle, ResizablePanel } from "@/modules/components/resizable";
 import { gpt } from "@/server/gpt";
 import { userInputStateAtom } from "@/utilities/recoil/atoms/no-storage";
 
@@ -34,7 +33,7 @@ const models = [
 
 const AiProfile = ({ name, madeBy, icon }: { name: string; madeBy: string; icon: string }) => {
   return (
-    <div className="flex items-center gap-2 rounded-lg p-2">
+    <div className="flex items-center gap-2 rounded-lg bg-white p-2">
       <Image
         alt=""
         width={32}
@@ -50,20 +49,18 @@ export default function ModelsArea() {
   const [userInput, setUserInput] = useRecoilState(userInputStateAtom);
 
   return (
-    <>
+    <div className="flex w-full gap-8">
       {models.map(({ id, name, madeBy, icon, func }, index) => {
         return (
           <>
-            <ResizablePanel
+            <div
               className={cn(
-                "flex flex-col items-center justify-start gap-4 bg-blue-200 pt-4",
+                "flex w-full flex-col items-center justify-start rounded-lg bg-zinc-200 p-4",
                 userInput && "items-start"
               )}
             >
               {userInput ? (
-                <div
-                  className="flex h-[44px] w-full items-center gap-4 rounded-lg bg-zinc-200 p-2"
-                >
+                <div className="flex h-[44px] w-full items-center gap-4 rounded-lg bg-white p-2">
                   <Image
                     height={24}
                     width={24}
@@ -79,11 +76,10 @@ export default function ModelsArea() {
                   icon={icon}
                 />
               )}
-            </ResizablePanel>
-            {index !== models.length - 1 && <ResizableHandle />}
+            </div>
           </>
         );
       })}
-    </>
+    </div>
   );
 }
