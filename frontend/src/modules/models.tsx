@@ -8,30 +8,6 @@ import Image from "next/image";
 import { Rnd } from "react-rnd";
 import { useRecoilState } from "recoil";
 
-const models = [
-  {
-    id: 0,
-    name: "ChatGPT",
-    madeBy: "OpenAI",
-    icon: "gpt.svg",
-    func: "gpt"
-  },
-  {
-    id: 1,
-    name: "Gemini",
-    madeBy: "Google",
-    icon: "gemini.svg",
-    func: "gemini"
-  },
-  {
-    id: 2,
-    name: "Claude",
-    madeBy: "Anthropic",
-    icon: "claude.svg",
-    func: "claude"
-  }
-];
-
 const AiProfile = ({ name, madeBy, icon }: { name: string; madeBy: string; icon: string }) => {
   return (
     <div className="flex w-full items-center gap-2 rounded-lg bg-white p-2">
@@ -46,7 +22,7 @@ const AiProfile = ({ name, madeBy, icon }: { name: string; madeBy: string; icon:
   );
 };
 
-export default function ModelsArea() {
+export default function ModelsArea({ models }: { models: any }) {
   const [userInput, setUserInput] = useRecoilState(userInputStateAtom);
 
   return (
@@ -55,6 +31,7 @@ export default function ModelsArea() {
         return (
           <div
             key={id}
+            id={name}
             className="h-full min-w-[300px]"
           >
             <Rnd
@@ -66,12 +43,14 @@ export default function ModelsArea() {
                 bottom: false
               }}
               className={cn(
-                "!static min-h-full min-w-full rounded-lg bg-zinc-200 p-4",
+                "!static min-w-full rounded-lg bg-zinc-200 p-4",
                 userInput && "items-start"
               )}
             >
               {userInput ? (
-                <div className="flex h-[44px] w-full items-center gap-4 rounded-lg bg-white p-2">
+                <div
+                  className="flex h-[44px] w-full items-center gap-4 rounded-lg bg-white p-2"
+                >
                   <Image
                     height={24}
                     width={24}

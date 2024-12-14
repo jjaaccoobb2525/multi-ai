@@ -13,7 +13,10 @@ export default function UserInputArea() {
   const [pressEnter, setPressEnter] = useState(false);
 
   return (
-    <div className="h-full">
+    <div
+      className="h-full"
+      id="userInput"
+    >
       <Rnd
         disableDragging
         enableResizing={{
