@@ -10,13 +10,9 @@ import { useRecoilState } from "recoil";
 
 export default function UserInputArea() {
   const [userInput, setUserInput] = useRecoilState(userInputStateAtom);
-  const [pressEnter, setPressEnter] = useState(false);
 
   return (
-    <div
-      className="h-full"
-      id="userInput"
-    >
+    <div id="userInput">
       <Rnd
         disableDragging
         enableResizing={{
@@ -25,10 +21,25 @@ export default function UserInputArea() {
           top: false,
           bottom: false
         }}
-        className="!static !flex min-h-full min-w-[300px] flex-col justify-start rounded-lg
-bg-zinc-200 p-4"
+        className="!static !flex min-w-[300px] flex-col justify-start rounded-lg bg-zinc-200
+p-4"
       >
-        {userInput && (
+        {userInput ? (
+          <div
+            className="flex items-center justify-start gap-4 rounded-lg bg-white p-2
+text-right"
+          >
+            <div className="rounded-full border-2 border-black">
+              <Image
+                src="/assets/user.png"
+                height={24}
+                width={24}
+                alt=""
+              />
+            </div>
+            <p>{userInput}</p>
+          </div>
+        ) : (
           <div
             className="flex items-center justify-start gap-4 rounded-lg bg-white p-2
 text-right"
@@ -44,25 +55,6 @@ text-right"
             <p>{userInput}</p>
           </div>
         )}
-        <Textarea
-          autoFocus
-          onChange={(e) => pressEnter && setUserInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              if (e.shiftKey) {
-                setPressEnter(false);
-
-                return;
-              } else {
-                setPressEnter(true);
-              }
-            } else {
-              setPressEnter(false);
-            }
-          }}
-          className="absolute bottom-4 w-[90%] resize-none bg-white transition-shadow
-duration-300 focus-within:shadow-lg hover:shadow-lg"
-        />
       </Rnd>
     </div>
   );

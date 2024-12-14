@@ -1,5 +1,6 @@
 import ModelsArea from "@/modules/models";
 import TabsComponent from "@/modules/tabs";
+import TextAreaComponent from "@/modules/textarea";
 import UserInputArea from "@/modules/user-input";
 
 const models = [
@@ -28,17 +29,17 @@ const models = [
 
 export default function MainPage() {
   return (
-    <main className="absolute flex h-full max-w-[200vw] flex-col items-start gap-8 p-8">
+    <main
+      className="absolute flex h-full w-[200vw] max-w-[200vw] flex-col items-start gap-8 p-8"
+    >
       <TabsComponent models={models} />
       <div className="flex h-[90%] w-full justify-between gap-8">
-        {/* 사용자의 Input 영역 */}
         <UserInputArea />
-        {/* 사용자의 Input 영역 */}
-        {/* AI 모델 영역 */}
         <ModelsArea models={models} />
-        {/* AI 모델 영역 */}
       </div>
-      <div className="flex w-full justify-center"></div>
+      <div className="relative flex w-[calc(100vw-64px)] justify-center bg-blue-200">
+        <TextAreaComponent />
+      </div>
     </main>
   );
 }

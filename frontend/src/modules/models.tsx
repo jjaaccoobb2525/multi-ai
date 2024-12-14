@@ -13,8 +13,8 @@ const AiProfile = ({ name, madeBy, icon }: { name: string; madeBy: string; icon:
     <div className="flex w-full items-center gap-2 rounded-lg bg-white p-2">
       <Image
         alt=""
-        width={32}
-        height={32}
+        width={28}
+        height={28}
         src={`/icons/${icon}`}
       />
       <p>{`${madeBy}: ${name}`}</p>
