@@ -2,13 +2,13 @@
 
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
-import { gemini } from "@ai-sdk/google-generative-ai";
+import { google } from "@ai-sdk/google";
 import { anthropic } from "@ai-sdk/anthropic";
 
 export async function chatGPT(messages: { role: string; content: string }[]) {
   try {
     const { text } = await generateText({
-      model: openai("gpt-4-turbo"),
+      model: openai("gpt-4o-mini"),
       messages
     });
     return { response: text };
@@ -23,7 +23,7 @@ export async function chatGemini(
 ) {
   try {
     const { text } = await generateText({
-      model: gemini("gemini-pro"),
+      model: google("gemini-1.5-flash"),
       messages
     });
     return { response: text };
@@ -38,7 +38,7 @@ export async function chatClaude(
 ) {
   try {
     const { text } = await generateText({
-      model: anthropic("claude-3-opus"),
+      model: anthropic("claude-3-5-sonnet-latest"),
       messages
     });
     return { response: text };
