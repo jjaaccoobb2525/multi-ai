@@ -27,7 +27,8 @@ bg-zinc-200 p-4"
       >
         {userInput && (
           <div
-            className="flex items-center justify-start gap-4 rounded-lg bg-white p-2 text-right"
+            className="flex items-center justify-start gap-4 rounded-lg bg-white p-2
+text-right"
           >
             <div className="rounded-full border-2 border-black">
               <Image
@@ -41,6 +42,7 @@ bg-zinc-200 p-4"
           </div>
         )}
         <Textarea
+          autoFocus
           onChange={(e) => pressEnter && setUserInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
@@ -55,8 +57,8 @@ bg-zinc-200 p-4"
               setPressEnter(false);
             }
           }}
-          className="absolute bottom-4 w-[90%] resize-none transition-shadow duration-300
-focus-within:shadow-lg hover:shadow-lg"
+          className="absolute bottom-4 w-[90%] resize-none bg-white transition-shadow
+duration-300 focus-within:shadow-lg hover:shadow-lg"
         />
       </Rnd>
     </div>

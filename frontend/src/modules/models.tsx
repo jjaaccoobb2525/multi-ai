@@ -5,7 +5,6 @@ import { gpt } from "@/server/gpt";
 import { userInputStateAtom } from "@/utilities/recoil/atoms/no-storage";
 
 import Image from "next/image";
-import { Draggable } from "react-drag-reorder";
 import { Rnd } from "react-rnd";
 import { useRecoilState } from "recoil";
 
