@@ -1,10 +1,8 @@
 "use client";
 
-import { Textarea } from "@/modules/components/textarea";
 import { userInputStateAtom } from "@/utilities/recoil/atoms/no-storage";
 
 import Image from "next/image";
-import { useState } from "react";
 import { Rnd } from "react-rnd";
 import { useRecoilState } from "recoil";
 
