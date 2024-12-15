@@ -91,7 +91,7 @@ export default function MultiAIChat() {
             href="/local-storage"
             className="text-blue-500 hover:underline"
           >
-            View Local Storage
+            채팅 로그
           </Link>
         </div>
       </div>
@@ -113,21 +113,21 @@ export default function MultiAIChat() {
       <div className="sticky bottom-0 z-10 p-4 border-t bg-white">
         <form
           onSubmit={handleSubmit}
-          className="flex space-x-2"
+          className="flex space-x-2 items-center"
         >
           <Textarea
             value={sharedInput}
             onChange={(e) => setSharedInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type your message here..."
-            className="flex-1"
+            placeholder="메시지를 입력하세요..."
+            className="flex-1 resize-none"
             style={{ width: "50vw" }}
           />
           <Button
             type="submit"
             disabled={isLoading}
           >
-            {isLoading ? "Sending..." : "Send to All"}
+            {isLoading ? "요청 중..." : "입력하기"}
           </Button>
         </form>
       </div>

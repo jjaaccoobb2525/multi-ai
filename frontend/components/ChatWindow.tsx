@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
+import Image from "next/image";
 
 interface ChatWindowProps {
   aiName: string;
@@ -48,7 +49,15 @@ export default function ChatWindow({
     <>
       <div className="h-full flex flex-col border-r last:border-r-0 w-1/3">
         <div className="sticky top-0 z-10 flex justify-between items-center p-4 border-b bg-white">
-          <h2 className="text-lg font-semibold">{aiName}</h2>
+          <div className="flex items-center gap-4">
+            <Image
+              alt=""
+              src={`/icons/${aiName.toLowerCase()}.svg`}
+              width={28}
+              height={28}
+            />
+            <h2 className="text-lg font-semibold">{aiName}</h2>
+          </div>
           <Button
             variant="ghost"
             size="icon"

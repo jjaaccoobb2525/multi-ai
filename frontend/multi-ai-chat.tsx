@@ -52,7 +52,7 @@ export default function MultiAIChat() {
           <Input
             value={sharedInput}
             onChange={(e) => setSharedInput(e.target.value)}
-            placeholder="Type your message here..."
+            placeholder="메시지를 입력하세요..."
             className="flex-1"
           />
           <select
