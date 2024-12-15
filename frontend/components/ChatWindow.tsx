@@ -31,7 +31,7 @@ export default function ChatWindow({
             message.role === "user" ? "text-right" : "text-left"
           }`}
         >
-          <div className="inline-block p-2 rounded-lg bg-black text-white">
+          <div className="inline-block max-w-[85%] p-2 rounded-lg bg-black text-white">
             {message.content}
           </div>
         </div>
