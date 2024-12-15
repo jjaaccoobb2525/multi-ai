@@ -61,9 +61,10 @@ export default function MultiAIChat() {
           const updated = [...prev];
           const lastConversation = updated[updated.length - 1];
           AI_SERVICES.forEach((ai, index) => {
-            lastConversation.responses[ai] = responses[index].content;
+            lastConversation.responses[ai] = responses[index].response;
           });
           localStorage.setItem("conversations", JSON.stringify(updated));
+          console.log(lastConversation.responses);
           return updated;
         });
       } catch (error) {
