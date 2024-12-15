@@ -4,26 +4,36 @@ import { useState, useEffect } from 'react'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import Link from 'next/link'
-import ReactMarkdown from 'react-markdown'
+
+type Conversation = {
+  prompt: string
+  responses: Record<string, string>
+}
 
 export default function LocalStoragePage() {
-  const [chatHistory, setChatHistory] = useState<{ prompt: string, responses: Record<string, string> }[]>([])
+  const [conversations, setConversations] = useState<Conversation[]>([])
 
   useEffect(() => {
-    const savedHistory = localStorage.getItem('chatHistory')
-    if (savedHistory) {
-      setChatHistory(JSON.parse(savedHistory))
+    const savedConversations = localStorage.getItem('conversations')
+    if (savedConversations) {
+      setConversations(JSON.parse(savedConversations))
     }
   }, [])
 
   const downloadJSON = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(chatHistory, null, 2))
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(conversations, null, 2))
     const downloadAnchorNode = document.createElement('a')
     downloadAnchorNode.setAttribute("href", dataStr)
-    downloadAnchorNode.setAttribute("download", "chat_history.json")
+    downloadAnchorNode.setAttribute("download", "conversations.json")
     document.body.appendChild(downloadAnchorNode)
     downloadAnchorNode.click()
     downloadAnchorNode.remove()
+  }
+
+  const deleteConversation = (index: number) => {
+    const updatedConversations = conversations.filter((_, i) => i !== index)
+    setConversations(updatedConversations)
+    localStorage.setItem('conversations', JSON.stringify(updatedConversations))
   }
 
   return (
@@ -39,17 +49,18 @@ export default function LocalStoragePage() {
           </div>
         </div>
         <ScrollArea className="h-[calc(100vh-200px)] border rounded-md p-4">
-          {chatHistory.map((entry, index) => (
+          {conversations.map((conversation, index) => (
             <div key={index} className="mb-8 pb-4 border-b last:border-b-0">
-              <div className="font-bold text-lg mb-2">User Prompt:</div>
-              <div className="ml-4 mb-4 p-2 bg-black text-white rounded-lg">{entry.prompt}</div>
-              <div className="font-bold text-lg mb-2">AI Responses:</div>
-              {Object.entries(entry.responses).map(([ai, response]) => (
-                <div key={ai} className="ml-4 mb-2">
-                  <span className="font-semibold">{ai}: </span>
-                  <div className="p-2 bg-black text-white rounded-lg mt-1">
-                    <ReactMarkdown>{response}</ReactMarkdown>
-                  </div>
+              <div className="flex justify-between items-start mb-2">
+                <h2 className="text-xl font-bold">Conversation {index + 1}</h2>
+                <Button variant="destructive" size="sm" onClick={() => deleteConversation(index)}>Delete</Button>
+              </div>
+              <div className="mb-4 p-2 rounded-lg bg-black text-white">
+                <strong>User Prompt:</strong> {conversation.prompt}
+              </div>
+              {Object.entries(conversation.responses).map(([ai, response]) => (
+                <div key={ai} className="mb-4 p-2 rounded-lg bg-black text-white">
+                  <strong>{ai} Response:</strong> {response}
                 </div>
               ))}
             </div>

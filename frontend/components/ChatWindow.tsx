@@ -2,34 +2,24 @@ import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Loader2, Maximize2, Minimize2 } from 'lucide-react'
-import ReactMarkdown from 'react-markdown'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 interface ChatWindowProps {
   aiName: string
-  chatHistory: { prompt: string, responses: Record<string, string> }[]
+  messages: { content: string, role: 'user' | 'assistant' }[]
   isLoading: boolean
 }
 
-export default function ChatWindow({ aiName, chatHistory, isLoading }: ChatWindowProps) {
+export default function ChatWindow({ aiName, messages, isLoading }: ChatWindowProps) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   const ChatContent = () => (
     <>
-      {chatHistory.map((entry, index) => (
-        <div key={index} className="space-y-2">
-          <div className="flex justify-end">
-            <div className="bg-black text-white p-2 rounded-lg max-w-[80%]">
-              {entry.prompt}
-            </div>
+      {messages.map((message, index) => (
+        <div key={index} className={`mb-4 ${message.role === 'user' ? 'text-right' : 'text-left'}`}>
+          <div className="inline-block p-2 rounded-lg bg-black text-white">
+            {message.content}
           </div>
-          {entry.responses[aiName] && (
-            <div className="flex justify-start">
-              <div className="bg-black text-white p-2 rounded-lg max-w-[80%]">
-                <ReactMarkdown>{entry.responses[aiName]}</ReactMarkdown>
-              </div>
-            </div>
-          )}
         </div>
       ))}
       {isLoading && (

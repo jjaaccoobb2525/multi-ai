@@ -9,40 +9,44 @@ import ChatWindow from "@/components/ChatWindow";
 
 const AI_SERVICES = ["GPT", "Gemini", "Claude"];
 
+type Conversation = {
+  prompt: string;
+  responses: Record<string, string>;
+};
+
 export default function MultiAIChat() {
   const [sharedInput, setSharedInput] = useState("");
-  const [chatHistory, setChatHistory] = useState<
-    { prompt: string; responses: Record<string, string> }[]
-  >([]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
 
   useEffect(() => {
-    const savedHistory = localStorage.getItem("chatHistory");
-    if (savedHistory) {
-      setChatHistory(JSON.parse(savedHistory));
+    const savedConversations = localStorage.getItem("conversations");
+    if (savedConversations) {
+      try {
+        const parsed = JSON.parse(savedConversations);
+        setConversations(Array.isArray(parsed) ? parsed : []);
+      } catch (error) {
+        console.error("Error parsing conversations:", error);
+        setConversations([]);
+      }
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
-  }, [chatHistory]);
-
   const chatStates = AI_SERVICES.reduce((acc, ai) => {
-    // eslint-disable-next-line
     acc[ai] = useChat({
       api: `/api/chat/${ai.toLowerCase()}`,
       onFinish: (message) => {
-        setChatHistory((prev) => {
-          const lastEntry = prev[prev.length - 1];
-          return [
-            ...prev.slice(0, -1),
-            {
-              ...lastEntry,
-              responses: {
-                ...lastEntry.responses,
-                [ai]: message.content
-              }
-            }
-          ];
+        setConversations((prev) => {
+          const updatedConversations = [...prev];
+          const lastConversation =
+            updatedConversations[updatedConversations.length - 1];
+          if (lastConversation) {
+            lastConversation.responses[ai] = message.content;
+            localStorage.setItem(
+              "conversations",
+              JSON.stringify(updatedConversations)
+            );
+          }
+          return updatedConversations;
         });
       }
     });
@@ -55,10 +59,17 @@ export default function MultiAIChat() {
       const currentInput = sharedInput;
       setSharedInput("");
 
-      setChatHistory((prev) => [
-        ...prev,
-        { prompt: currentInput, responses: {} }
-      ]);
+      setConversations((prev) => {
+        const updatedConversations = [
+          ...prev,
+          { prompt: currentInput, responses: {} }
+        ];
+        localStorage.setItem(
+          "conversations",
+          JSON.stringify(updatedConversations)
+        );
+        return updatedConversations;
+      });
 
       AI_SERVICES.forEach((ai) => {
         chatStates[ai].append({
@@ -73,10 +84,11 @@ export default function MultiAIChat() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      // eslint-disable-next-line
       handleSubmit(e as any);
     }
   };
+
+  console.log(chatStates);
 
   return (
     <div className="absolute inset-0 flex flex-col bg-white text-black">
@@ -96,7 +108,12 @@ export default function MultiAIChat() {
           <ChatWindow
             key={ai}
             aiName={ai}
-            chatHistory={chatHistory}
+            messages={conversations.flatMap((conv) => [
+              { role: "user", content: conv.prompt },
+              ...(conv.responses[ai]
+                ? [{ role: "assistant", content: conv.responses[ai] }]
+                : [])
+            ])}
             isLoading={chatStates[ai].isLoading}
           />
         ))}
