@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useChat } from "ai/react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
@@ -17,6 +16,7 @@ type Conversation = {
 export default function MultiAIChat() {
   const [sharedInput, setSharedInput] = useState("");
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const savedConversations = localStorage.getItem("conversations");
@@ -31,53 +31,46 @@ export default function MultiAIChat() {
     }
   }, []);
 
-  const chatStates = AI_SERVICES.reduce((acc, ai) => {
-    acc[ai] = useChat({
-      api: `/api/chat/${ai.toLowerCase()}`,
-      onFinish: (message) => {
-        setConversations((prev) => {
-          const updatedConversations = [...prev];
-          const lastConversation =
-            updatedConversations[updatedConversations.length - 1];
-          if (lastConversation) {
-            lastConversation.responses[ai] = message.content;
-            localStorage.setItem(
-              "conversations",
-              JSON.stringify(updatedConversations)
-            );
-          }
-          return updatedConversations;
-        });
-      }
-    });
-    return acc;
-  }, {} as Record<string, ReturnType<typeof useChat>>);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (sharedInput.trim()) {
+    if (sharedInput.trim() && !isLoading) {
       const currentInput = sharedInput;
       setSharedInput("");
+      setIsLoading(true);
 
-      setConversations((prev) => {
-        const updatedConversations = [
-          ...prev,
-          { prompt: currentInput, responses: {} }
-        ];
-        localStorage.setItem(
-          "conversations",
-          JSON.stringify(updatedConversations)
+      const newConversation: Conversation = {
+        prompt: currentInput,
+        responses: {}
+      };
+      setConversations((prev) => [...prev, newConversation]);
+
+      try {
+        const responses = await Promise.all(
+          AI_SERVICES.map((ai) =>
+            fetch(`/api/chat/${ai.toLowerCase()}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                messages: [{ role: "user", content: currentInput }]
+              })
+            }).then((res) => res.json())
+          )
         );
-        return updatedConversations;
-      });
 
-      AI_SERVICES.forEach((ai) => {
-        chatStates[ai].append({
-          content: currentInput,
-          role: "user"
+        setConversations((prev) => {
+          const updated = [...prev];
+          const lastConversation = updated[updated.length - 1];
+          AI_SERVICES.forEach((ai, index) => {
+            lastConversation.responses[ai] = responses[index].content;
+          });
+          localStorage.setItem("conversations", JSON.stringify(updated));
+          return updated;
         });
-        chatStates[ai].reload();
-      });
+      } catch (error) {
+        console.error("Error fetching AI responses:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -87,8 +80,6 @@ export default function MultiAIChat() {
       handleSubmit(e as any);
     }
   };
-
-  console.log(chatStates);
 
   return (
     <div className="absolute inset-0 flex flex-col bg-white text-black">
@@ -114,7 +105,7 @@ export default function MultiAIChat() {
                 ? [{ role: "assistant", content: conv.responses[ai] }]
                 : [])
             ])}
-            isLoading={chatStates[ai].isLoading}
+            isLoading={isLoading}
           />
         ))}
       </div>
@@ -131,7 +122,12 @@ export default function MultiAIChat() {
             className="flex-1"
             style={{ width: "50vw" }}
           />
-          <Button type="submit">Send to All</Button>
+          <Button
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? "Sending..." : "Send to All"}
+          </Button>
         </form>
       </div>
     </div>

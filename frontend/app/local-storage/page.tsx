@@ -16,7 +16,13 @@ export default function LocalStoragePage() {
   useEffect(() => {
     const savedConversations = localStorage.getItem('conversations')
     if (savedConversations) {
-      setConversations(JSON.parse(savedConversations))
+      try {
+        const parsed = JSON.parse(savedConversations)
+        setConversations(Array.isArray(parsed) ? parsed : [])
+      } catch (error) {
+        console.error('Error parsing conversations:', error)
+        setConversations([])
+      }
     }
   }, [])
 
@@ -36,6 +42,11 @@ export default function LocalStoragePage() {
     localStorage.setItem('conversations', JSON.stringify(updatedConversations))
   }
 
+  const deleteAllConversations = () => {
+    setConversations([])
+    localStorage.removeItem('conversations')
+  }
+
   return (
     <div className="min-h-screen bg-white text-black p-8">
       <div className="max-w-4xl mx-auto">
@@ -43,6 +54,7 @@ export default function LocalStoragePage() {
           <h1 className="text-3xl font-bold">Local Storage Content</h1>
           <div className="space-x-4">
             <Button onClick={downloadJSON}>Download JSON</Button>
+            <Button onClick={deleteAllConversations} variant="destructive">Delete All</Button>
             <Link href="/">
               <Button variant="outline">Back to Chat</Button>
             </Link>

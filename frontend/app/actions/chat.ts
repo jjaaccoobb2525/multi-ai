@@ -9,7 +9,8 @@ export async function chatGPT(messages: { role: string; content: string }[]) {
   try {
     const { text } = await generateText({
       model: openai("gpt-4o-mini"),
-      messages
+      messages,
+      apiKey: process.env.OPENAI_API_KEY
     });
     return { response: text };
   } catch (error) {
@@ -24,7 +25,8 @@ export async function chatGemini(
   try {
     const { text } = await generateText({
       model: google("gemini-1.5-flash"),
-      messages
+      messages,
+      apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY
     });
     return { response: text };
   } catch (error) {
@@ -39,7 +41,8 @@ export async function chatClaude(
   try {
     const { text } = await generateText({
       model: anthropic("claude-3-5-sonnet-latest"),
-      messages
+      messages,
+      apiKey: process.env.ANTHROPIC_API_KEY
     });
     return { response: text };
   } catch (error) {
