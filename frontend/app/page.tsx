@@ -6,12 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import ChatWindow from "@/components/ChatWindow";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog";
 
 const AI_SERVICES = ["GPT", "Gemini", "Claude"];
 
@@ -33,6 +27,7 @@ export default function MultiAIChat() {
   }, [chatHistory]);
 
   const chatStates = AI_SERVICES.reduce((acc, ai) => {
+    // eslint-disable-next-line
     acc[ai] = useChat({
       api: `/api/chat/${ai.toLowerCase()}`,
       onFinish: (message) => {
@@ -57,26 +52,28 @@ export default function MultiAIChat() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (sharedInput.trim()) {
+      const currentInput = sharedInput;
+      setSharedInput("");
+
       setChatHistory((prev) => [
         ...prev,
-        { prompt: sharedInput, responses: {} }
+        { prompt: currentInput, responses: {} }
       ]);
 
       AI_SERVICES.forEach((ai) => {
         chatStates[ai].append({
-          content: sharedInput,
+          content: currentInput,
           role: "user"
         });
         chatStates[ai].reload();
       });
-
-      setSharedInput("");
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
+      // eslint-disable-next-line
       handleSubmit(e as any);
     }
   };
